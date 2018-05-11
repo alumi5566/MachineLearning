@@ -1,3 +1,9 @@
+
+# coding: utf-8
+
+# In[3]:
+
+
 from statistics import mean, median
 import math
 import matplotlib.pyplot as plt
@@ -122,6 +128,10 @@ while True:
             dist[j] += float(context[j])
 #end of read file
 
+
+# In[18]:
+
+
 # auto fill in '?'
 dist[:] = [ int(x/len(attr_target_list)) for x in dist]
 for i in range(len(attr_target_list)):
@@ -157,6 +167,9 @@ print("size of attribute:",len(attr_target_list[0]))
 accuracy = []
 sensitivity = []
 specitivity = []
+accuracy2 = []
+sensitivity2 = []
+specitivity2 = []
 
 total_size = len(attr_target_list)
 for i in range(10):# 10-fold
@@ -164,10 +177,72 @@ for i in range(10):# 10-fold
     testing_data = attr_target_list[int(total_size*i/10):int(total_size*(i+1)/10)]
     training_data = attr_target_list[0:int(total_size*i/10)]
     training_data.extend(attr_target_list[int(total_size*(i+1)/10):])
-    p=2
+    p=1
     Cross_validation(testing_data, training_data, accuracy, sensitivity, specitivity, p)
-print(accuracy,"size=",len(accuracy))
-print(sensitivity,"size=",len(sensitivity))
-print(specitivity,"size=",len(specitivity))
+    p=2
+    Cross_validation(testing_data, training_data, accuracy2, sensitivity2, specitivity2, p)
+#print(accuracy,"size=",len(accuracy))
+#print(sensitivity,"size=",len(sensitivity))
+#print(specitivity,"size=",len(specitivity))
 
+
+# In[34]:
+
+
+X = np.arange(1,11,1)
+X2 = np.arange(1.2,11,1)
+s = ['']*10
+sA = ['']*10
+ax = plt.subplot(3, 1, 1)
+ax.set_title("accuracy")
+for i in range(10):
+    #print(len(accuracy[i::10]))
+    s[i] = mean(accuracy[i::10])
+    sA[i] = np.std(accuracy[i::10])
+print("p1 accuracy mean:",['%.2f'% elem for elem in s ])
+print("p1 accuracy sd:",['%.2f'% elem for elem in sA ])
+plt.errorbar(X, s, yerr=sA, fmt='o')
+for i in range(10):
+    #print(len(accuracy[i::10]))
+    s[i] = mean(accuracy2[i::10])
+    sA[i] = np.std(accuracy2[i::10])
+print("p2 accuracy mean:",['%.2f'% elem for elem in s ])
+print("p2 accuracy sd:",['%.2f'% elem for elem in sA ])
+plt.errorbar(X2, s, yerr=sA, fmt='x')
+
+ax = plt.subplot(3, 1, 2)
+ax.set_title("sensitivity")
+for i in range(10):
+    #print(len(accuracy[i::10]))
+    s[i] = mean(sensitivity[i::10])
+    sA[i] = np.std(sensitivity[i::10])
+print("p1 sensitivity mean:",['%.2f'% elem for elem in s ])
+print("p1 sensitivity sd:",['%.2f'% elem for elem in sA ])
+plt.errorbar(X, s, yerr=sA, fmt='o')
+for i in range(10):
+    #print(len(accuracy[i::10]))
+    s[i] = mean(sensitivity2[i::10])
+    sA[i] = np.std(sensitivity2[i::10])
+print("p2 sensitivity mean:",['%.2f'% elem for elem in s ])
+print("p2 sensitivity sd:",['%.2f'% elem for elem in sA ])
+plt.errorbar(X2, s, yerr=sA, fmt='x')
+
+ax = plt.subplot(3, 1, 3)
+ax.set_title("specitivity")
+for i in range(10):
+    #print(len(accuracy[i::10]))
+    s[i] = mean(specitivity[i::10])
+    sA[i] = np.std(specitivity[i::10])
+print("p1 specitivity mean:",['%.2f'% elem for elem in s ])
+print("p1 specitivity sd:",['%.2f'% elem for elem in sA ])
+plt.errorbar(X, s, yerr=sA, fmt='o')
+for i in range(10):
+    #print(len(accuracy[i::10]))
+    s[i] = mean(specitivity2[i::10])
+    sA[i] = np.std(specitivity2[i::10])
+print("p2 specitivity mean:",['%.2f'% elem for elem in s ])
+print("p2 specitivity sd:",['%.2f'% elem for elem in sA ])
+plt.errorbar(X2, s, yerr=sA, fmt='x')
+
+plt.show()
 
